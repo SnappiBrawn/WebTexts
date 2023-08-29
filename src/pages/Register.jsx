@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../images/logo.JPG";
+import logo from "../images/logo.jpg";
 import placeholder from "../images/profile_upload_placeholder.png";
 
 const Register = () =>{

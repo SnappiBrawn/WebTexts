@@ -1,9 +1,40 @@
+@mixin mobile{
+    @media screen and (max-width: 1080px){
+        @content
+    }
+}
+
+@mixin laptop{
+    @media screen and (max-width: 1200px){
+        @content
+    }
+}
+
+*{
+    @include mobile{
+        font-size: xx-large;
+    }
+}
+
+
 .formContainer{
     background: linear-gradient(160deg, #e5658f 0%, #875865 70%, #585251 95%);
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .loader{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #090909a2;
+        color:#f8e2f5;
+        width:100%;
+        height: 100%;
+        position: absolute;        
+        font-size: x-large;
+    }
 
     .formWrapper{
         background-color: #1a1a1a;
@@ -51,6 +82,15 @@
                 padding: 10px;
                 border-radius: 5px;
                 cursor: pointer;
+            }
+            .loginError{
+                background-color: #e5659081;
+                color: whitesmoke;
+                text-align: center;
+                padding: 5px;
+                border-radius: 5px;
+                font-size: small;
+                font-weight: bold;
             }
         }
         p{
@@ -110,6 +150,9 @@
                         border-radius: 5px;
                         cursor: pointer;
                     }
+                    @include mobile{
+                        display:none;
+                    }
                 }
             }
             
@@ -146,6 +189,9 @@
                     width: 50px;
                     border-radius: 50%;
                     object-fit: cover;
+                    @include mobile{
+                        display:none;
+                    }
                 }
 
                 .userChatInfo{
@@ -199,7 +245,7 @@
                 background-color: #d6c1d3;
                 padding: 10px;
                 height: calc(100% - 160px);
-                overflow-y: scroll;
+                overflow-y: overlay;
 
                 .message{
                     display: flex;

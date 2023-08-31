@@ -5,12 +5,12 @@ const Input = () => {
     <div className='input'>
       <input type='text' placeholder='Type a message'></input>
       <div className="send">
-        <span class="fas fa-image"/>
+        <span className="fas fa-image"/>
         <input type='file' id='attachment' style={{display:"none"}}/>
         <label htmlFor='attachment'>
-          <span class="fas fa-paperclip"/>
+          <span className="fas fa-paperclip"/>
         </label>
-        <button> <span class="fas fa-paper-plane"/> </button>
+        <button> <span className="fas fa-paper-plane"/> </button>
       </div>
     </div>
   )

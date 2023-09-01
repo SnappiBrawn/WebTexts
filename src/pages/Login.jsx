@@ -20,12 +20,12 @@ const Login = () =>{
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
-                navigate('/home');
+                navigate('/');
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                setErr([true,errorCode+":"+errorMessage])
+                setErr([true,errorCode+" : "+errorMessage])
             });
         }
         catch(err){
@@ -44,7 +44,7 @@ const Login = () =>{
                 <input type="password" placeholder="Password" />
                 <button>Login</button>
             </form>
-            <p>Don't have an account yet? Sign Up</p>
+            <p>Don't have an account yet? <span className="link" onClick={()=>{navigate('../register')}}>Sign Up</span></p>
         </div>
     </div>
     );

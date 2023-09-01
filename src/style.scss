@@ -96,6 +96,15 @@
         p{
             font-size: small;
         }
+        .link{
+            color: #e5658f;
+            text-decoration: underline;
+            cursor: pointer;
+
+            &:hover{
+                color: white;
+            }
+        }
     }
 }
 

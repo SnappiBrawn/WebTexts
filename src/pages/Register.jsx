@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, storage, db } from '../firebase';
 import { doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Navigate} from "react-router-dom";
 
 
 const Register = () =>{
@@ -43,10 +43,14 @@ const Register = () =>{
                             email,
                             photoURL: downloadURL,               
                         });
-                        await setDoc(doc(db,"userChats",res.user.uid),{});
+                        await setDoc(doc(db,"userChats",res.user.uid),{}).then(()=>{
+                            document.querySelector('.loader').style.display = "none";
+                            navigate("../");
+                            navigate(0);
+                        });
+
                     });
-                    document.querySelector('.loader').style.display = "none";
-                    navigate("/home");
+                    
                 }}   
             );
             
@@ -72,7 +76,7 @@ const Register = () =>{
                 <label htmlFor="profilePic"><img height="30" src={placeholder}/><span>Pick an Avatar</span></label>
                 <button>Sign Up</button>
             </form>
-            <p>Do you already have an account? Sign In</p>
+            <p>Do you already have an account? <span className="link" onClick={()=>{navigate('../login')}}>Sign In</span></p>
         </div>
     </div>
     );

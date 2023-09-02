@@ -1,15 +1,27 @@
-import React from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
+import { ChatContext } from '../context/ChatContext';
+import { AuthContext } from '../context/AuthContext';
+import { Timestamp } from 'firebase/firestore';
 
-const Message = () => {
+const Message = ({message}) => {
+  const {currentUser} = useContext(AuthContext);
+  const {data} = useContext(ChatContext);
+
+  const ref = useRef();
+
+  useEffect(()=>{
+    ref.current?.scrollIntoView({behavior: 'smooth'});
+  },[message])
+
   return (
-    <div className='message owner'>
+    <div ref={ref} className={message.senderId === currentUser.uid?'message owner':'message'}>
       <div className="messageInfo">
-        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.goodfreephotos.com%2Fcache%2Fpeople%2Fbeautiful-woman-with-blonde-hair-with-green-eyes_w80_h80_cw80_ch80_thumb.jpg%3Fcached%3D1524708655&f=1&nofb=1&ipt=7854461e7b9c82ac3797efd74673cd5a75da4c188520958b37a03f80b559bed7&ipo=images"/>
-        <span>Just Now</span>
+        <img src={message.senderId === currentUser.uid?currentUser.photoURL:data.user.photoURL}/>
+        <span>{message.date===Timestamp.now()?'Just Now':'Ago'}</span>
       </div>
       <div className="messageContent">
-        <p>Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.Hi. This is a test message.</p>
-        <img src="https://c4.wallpaperflare.com/wallpaper/1024/292/896/cyberpunk-digital-art-science-fiction-futuristic-city-wallpaper-thumb.jpg"/>
+        <p>{message.msg}</p>
+        {message.img && <img src={message.img}/>}
       </div>
     </div>
   )

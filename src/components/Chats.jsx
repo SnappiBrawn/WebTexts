@@ -1,29 +1,42 @@
-import React from 'react'
+import { doc, onSnapshot } from 'firebase/firestore';
+import React, { useContext, useEffect, useState } from 'react'
+import { db } from '../firebase';
+import { AuthContext } from '../context/AuthContext';
+import { ChatContext } from '../context/ChatContext';
 
 const Chats = () => {
+  const [chats, setChats] = useState([]);
+  const {currentUser} = useContext(AuthContext);
+  const {dispatch} = useContext(ChatContext)
+
+  useEffect(()=>{
+    const getChats = ()=>{
+      const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+        setChats(doc.data());
+      });
+  
+      return ()=>{
+        unsub();
+      };
+    };
+    currentUser.uid && getChats();
+  },[currentUser.uid])
+
+  const openChat = (gotoChat) =>{
+    dispatch({type:"CHANGE_USER",payload:gotoChat})
+  }
+
   return (
     <div className='chats'>
-      <div className="userChat">
-        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.goodfreephotos.com%2Fcache%2Fpeople%2Fbeautiful-woman-with-blonde-hair-with-green-eyes_w80_h80_cw80_ch80_thumb.jpg%3Fcached%3D1524708655&f=1&nofb=1&ipt=7854461e7b9c82ac3797efd74673cd5a75da4c188520958b37a03f80b559bed7&ipo=images"/>
+      {Object.entries(chats)?.sort((a,b)=>b[1].date - a[1].date).map(chat=>
+        <div className="userChat" key={chat[0]} onClick={()=>openChat(chat[1].userInfo)}>
+        <img src={chat[1].userInfo.photoURL} />
         <div className="userChatInfo">
-          <span>David</span>
-          <p>Hello man</p>
+          <span>{chat[1].userInfo.displayName}</span>
+          <p>{chat[1].recentMsg?.textMessage}</p>
         </div>
       </div>
-      <div className="userChat">
-        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.goodfreephotos.com%2Fcache%2Fpeople%2Fbeautiful-woman-with-blonde-hair-with-green-eyes_w80_h80_cw80_ch80_thumb.jpg%3Fcached%3D1524708655&f=1&nofb=1&ipt=7854461e7b9c82ac3797efd74673cd5a75da4c188520958b37a03f80b559bed7&ipo=images"/>
-        <div className="userChatInfo">
-          <span>Oprah</span>
-          <p>Hello man</p>
-        </div>
-      </div>
-      <div className="userChat">
-        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.goodfreephotos.com%2Fcache%2Fpeople%2Fbeautiful-woman-with-blonde-hair-with-green-eyes_w80_h80_cw80_ch80_thumb.jpg%3Fcached%3D1524708655&f=1&nofb=1&ipt=7854461e7b9c82ac3797efd74673cd5a75da4c188520958b37a03f80b559bed7&ipo=images"/>
-        <div className="userChatInfo">
-          <span>Ramirez</span>
-          <p>Hello man</p>
-        </div>
-      </div>
+      )}
     </div>
   )
 }

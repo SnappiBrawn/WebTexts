@@ -10,12 +10,6 @@
     }
 }
 
-*{
-    @include mobile{
-        font-size: xx-large;
-    }
-}
-
 
 .formContainer{
     background: linear-gradient(160deg, #e5658f 0%, #875865 70%, #585251 95%);
@@ -119,7 +113,7 @@
         display: flex;
         height: 90%;
         width: 90%;
-        border: 1px white solid;
+        box-shadow: 0px 0px 10px black;
         border-radius: 10px;
         overflow: hidden;
         
@@ -139,6 +133,17 @@
                 img{
                     height: 80%;
                 }
+                .logo-main{
+                    @include mobile{
+                        display:none;
+                    }
+                }
+                .logo-small{
+                    display:none;
+                    @include mobile{
+                        display:block;
+                    }
+                }
                 .user{
                     height: 80%;
                     display: flex;
@@ -146,8 +151,11 @@
                     gap: 10px;
 
                     img{
+                        height:40px;
+                        width: 40px;
                         border-radius: 50%;
                         object-fit: cover;
+                        object-position: center top;
                     }
 
                     button{
@@ -166,13 +174,19 @@
             }
             
             .search{
-                border-bottom: 1px white solid; 
+                border-bottom: 1px #585251 solid; 
 
                 .searchForm{
                     display: flex;
                     gap: 10px;
                     padding: 10px;
                     align-items: center;
+
+                    .fa-search{
+                        @include mobile{
+                            display:none;
+                        }
+                    }
                 }
 
                 input{
@@ -184,6 +198,8 @@
                     color:#d6c1d3;
                     font-size: large;
                 }
+
+
                 
             }
             .userChat{
@@ -198,9 +214,6 @@
                     width: 50px;
                     border-radius: 50%;
                     object-fit: cover;
-                    @include mobile{
-                        display:none;
-                    }
                 }
 
                 .userChatInfo{
@@ -210,6 +223,9 @@
                     }
                     p{
                         font-size: 14px;
+                    }
+                    @include mobile{
+                        display:none;
                     }
                 }
                 &:hover{
@@ -290,6 +306,7 @@
                             background-color: white;
                             padding: 10px;
                             border-radius: 0px 10px 10px 10px;
+                            width:max-content;
                         }
 
                         img{

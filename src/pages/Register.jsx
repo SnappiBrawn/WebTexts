@@ -45,7 +45,7 @@ const Register = () =>{
                         });
                         await setDoc(doc(db,"userChats",res.user.uid),{}).then(()=>{
                             document.querySelector('.loader').style.display = "none";
-                            navigate("../");
+                            navigate("../WebTexts");
                             navigate(0);
                         });
 

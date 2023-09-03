@@ -22,7 +22,7 @@ function App() {
   const router = createBrowserRouter([
     
     {
-      path: '/',
+      path: '/WebTexts',
       element: <ProtectedRoute><Home/></ProtectedRoute>,
     },
     {

@@ -15,6 +15,7 @@ const Search = () => {
     try{
       const querySnapshot = await getDocs(q);
       if(querySnapshot.docs.length==0){
+        console.log(querySnapshot.docs);
         setErr(true);
         setUser(null);
       } 
@@ -36,15 +37,13 @@ const Search = () => {
     document.getElementById("search-field").value="";
   }
 
-  const triggerSearch = (e) =>{
-    if(e.code === "Enter"){
-      if(searchName==""){
-        setErr(false);
-        setUser(null);
-      }
-      else{
-        userSearch();
-      }
+  const triggerSearch = () =>{
+    if(searchName==""){
+      setErr(false);
+      setUser(null);
+    }
+    else{
+      userSearch();
     }
   }
 
@@ -84,7 +83,7 @@ const Search = () => {
     <div className='search'>
       <div className="searchForm">
         <span className="fas fa-search"></span>
-        <input id="search-field" type="text" placeholder='Search for a user' onKeyDown={triggerSearch} onChange={(e)=>{setSearchName(e.target.value)}}></input>
+        <input id="search-field" type="text" placeholder='Search for a user' value={searchName} onChange={(e)=>{setSearchName(e.target.value); console.log("1"); triggerSearch();console.log("2");}}></input>
         <span className="fas fa-times" onClick={clearSearch}></span>
       </div>
       {err && <span>No such user found!</span>}

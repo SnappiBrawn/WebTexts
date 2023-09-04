@@ -15,8 +15,8 @@ const Register = () =>{
 
     const handleSubmission = async (e) =>{
         e.preventDefault();
-        var username = e.target[0].value;
-        var email = e.target[1].value;
+        var username = e.target[0].value.trim();
+        var email = e.target[1].value.trim();
         var password = e.target[2].value;
         var profile = e.target[3].files[0];
 

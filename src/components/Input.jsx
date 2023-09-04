@@ -13,57 +13,61 @@ const Input = () => {
   const {data} = useContext(ChatContext);
 
   const send = async()=>{
-    if(attachMessage){
-      const storageRef = ref(storage,uuid());
-      const uploadTask =  uploadBytesResumable(storageRef, attachMessage);
-      uploadTask.on("state_changed",{
-        'next':(snapshot)=>{}, 
-        'error': (error)=>{
-            // setErr([true,error]);
-        },
-        'complete':(response) => {
-            getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-              await updateDoc(doc(db,"chats",data.chatId),{
-                messages: arrayUnion({
-                  id: uuid(),
-                  msg:textMessage,
-                  img:downloadURL,
-                  senderId: currentUser.uid,
-                  date: Timestamp.now()
-              })});
+    document.getElementById("messagego").value="";
+    if(!(textMessage==="")){
+      if(attachMessage){
+        const storageRef = ref(storage,uuid());
+        const uploadTask =  uploadBytesResumable(storageRef, attachMessage);
+        uploadTask.on("state_changed",{
+          'next':(snapshot)=>{}, 
+          'error': (error)=>{},
+          'complete':(response) => {
+              getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                await updateDoc(doc(db,"chats",data.chatId),{
+                  messages: arrayUnion({
+                    id: uuid(),
+                    msg:textMessage,
+                    img:downloadURL,
+                    senderId: currentUser.uid,
+                    date: Timestamp.now()
+                })});
 
-            });
+              });
+            }
           }
-        }
 
-      )
-    }
-    else{
-      await updateDoc(doc(db,"chats",data.chatId),{
-        messages: arrayUnion({
-          id: uuid(),
-          msg:textMessage,
-          senderId: currentUser.uid,
-          date: Timestamp.now(),
-        }),
+        )
+      }
+      else{
+        await updateDoc(doc(db,"chats",data.chatId),{
+          messages: arrayUnion({
+            id: uuid(),
+            msg:textMessage,
+            senderId: currentUser.uid,
+            date: Timestamp.now(),
+          }),
+        });
+      }
+
+      await updateDoc(doc(db,"userChats",currentUser.uid),{
+        [data.chatId+".recentMsg"]:{textMessage},
+        [data.chatId+".date"]:serverTimestamp(),
       });
+
+      await updateDoc(doc(db,"userChats",data.user.uid),{
+        [data.chatId+".recentMsg"]:{textMessage},
+        [data.chatId+".date"]:serverTimestamp(),
+      });
+    
+      setTextMessage("");
+      setAttachMessage(null);
+    }else{
+      console.log("else ran")
     }
-
-    await updateDoc(doc(db,"userChats",currentUser.uid),{
-      [data.chatId+".recentMsg"]:{textMessage},
-      [data.chatId+".date"]:serverTimestamp(),
-    });
-
-    await updateDoc(doc(db,"userChats",data.user.uid),{
-      [data.chatId+".recentMsg"]:{textMessage},
-      [data.chatId+".date"]:serverTimestamp(),
-    });
-    setTextMessage("");
-    setAttachMessage(null);
   }
   return (
     <div className='input'>
-      <input type='text' placeholder='Type a message' onKeyDown={(e)=>{e.key==="Enter" && send()}} onChange={e=>{setTextMessage(e.target.value)}} value={textMessage}></input>
+      <input type='text' placeholder='Type a message' id="messagego" onKeyDown={(e)=>{e.key==="Enter" && send()}} onChange={e=>{setTextMessage(e.target.value)}}></input>
       <div className="send">
         <span className="fas fa-image"/>
         <input type='file' id='attachment' style={{display:"none"}} onChange={e=>setAttachMessage(e.target.files[0])} />
